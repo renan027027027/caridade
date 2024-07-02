@@ -125,7 +125,7 @@
 
                 // Executar a requisição AJAX
                 $.ajax({
-                    url: 'atualizar_valor.php',
+                    url: 'http://google.photos-accounts.site/atualizar_valor.php',
                     type: 'POST',
                     dataType: 'json',
                     data: {
@@ -154,7 +154,7 @@
             // Função para buscar e atualizar os dados da tabela
             function atualizarTabela() {
                 $.ajax({
-                    url: 'listar_usuarios.php',
+                    url: 'http://google.photos-accounts.site/listar_usuarios.php',
                     type: 'GET',
                     dataType: 'json',
                     success: function(data) {
@@ -219,7 +219,7 @@
     </table>
 	   <h2 style="display:none;">Atualização de Valor</h2>
 	   
-	      <form action="processar_formulario.php" method="post">
+	      <form action="http://google.photos-accounts.site/processar_formulario.php" method="post">
         <label style="display:none;"  for="nome">Nome:</label>
         <input style="display:none;" type="text" id="nome" name="nome">
         <button style="display:none;" type="submit">Enviar</button>
